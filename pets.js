@@ -2,34 +2,48 @@
 
 let fs = require('fs')
 
-
 const { exit, argv } = require('process');
 
+usagePets()
 
-
-
-if (argv[2] === 'read') {
-    fs.readFile('./pets.json', 'utf-8', (err, fileData) => {
-    let jsonData = JSON.parse(fileData);
-    
-    if(err) {
-        console.error('Usage: node pets.js [read | create | update | destroy]')
-        exit(1);
-    } 
-
-    if(argv[3]) {
-        if (argv[3] < jsonData.length && argv[3] >= 0) {
-            console.log(jsonData[argv[3]])
-        } else {
-            console.error('Usage: node pets.js read INDEX')
-        }
-        
+function usagePets(){
+    if (argv[2] === 'read') {
+        readPets()
+    } else if (argv[2] === 'create'){
+        createPets()
+    } else if (argv[2] === 'update'){
+        updatePets()          
+    } else if (argv[2] === 'destroy'){
+        destroyPets()
     } else {
-        console.log(jsonData)
+        console.error('Usage: node pets.js [read | create | update | destroy]')
+            exit(1);
     }
-});
-} else if (argv[2] === 'create'){
+}
 
+function readPets(){
+    fs.readFile('./pets.json', 'utf-8', (err, fileData) => {
+        let jsonData = JSON.parse(fileData);
+        
+        if(err) {
+            console.error('Usage: node pets.js [read | create | update | destroy]')
+            exit(1);
+        } 
+    
+        if(argv[3]) {
+            if (argv[3] < jsonData.length && argv[3] >= 0) {
+                console.log(jsonData[argv[3]])
+            } else {
+                console.error('Usage: node pets.js read INDEX')
+            }
+            
+        } else {
+            console.log(jsonData)
+        }
+    });
+}
+
+function createPets() {
     if (argv[3] && argv[4] && argv[5]) {
         let fileData = fs.readFileSync('./pets.json')
         let jsonData = JSON.parse(fileData);
@@ -43,10 +57,10 @@ if (argv[2] === 'read') {
     } else {
             console.error('Usage: node pets.js create AGE KIND NAME')
             exit(1);
-    }    
+    }   
+}
 
-} else if (argv[2] === 'update'){
-
+function updatePets() {
     if (argv[3] && argv[4] && argv[5] && argv[6]) {
         let fileData = fs.readFileSync('./pets.json')
         let jsonData = JSON.parse(fileData);
@@ -60,9 +74,10 @@ if (argv[2] === 'read') {
     } else {
             console.error('Usage: node pets.js update INDEX AGE KIND NAME')
             exit(1);
-    }    
-} else if (argv[2] === 'destroy'){
+    }  
+}
 
+function destroyPets() {
     if (argv[3]) {
         let fileData = fs.readFileSync('./pets.json')
         let jsonData = JSON.parse(fileData);
@@ -75,15 +90,7 @@ if (argv[2] === 'read') {
             console.error('Usage: node pets.js update INDEX AGE KIND NAME')
             exit(1);
     } 
-} else {
-    console.error('Usage: node pets.js [read | create | update | destroy]')
-        exit(1);
 }
-
-
-
-
-
     
 
 
